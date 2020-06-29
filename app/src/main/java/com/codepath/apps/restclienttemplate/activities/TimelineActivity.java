@@ -8,6 +8,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
@@ -123,5 +125,20 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.i(TAG, "onFailure! " + response, throwable);
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem compose = menu.findItem(R.id.miCompose);
+
+        compose.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Toast.makeText(getApplicationContext(), "Compose your tweet here!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        return true;
     }
 }
