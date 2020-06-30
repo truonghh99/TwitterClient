@@ -76,6 +76,37 @@ public class TimelineActivity extends AppCompatActivity {
             }
         };
 
+        // Like current tweet when like icon is clicked
+        TweetsAdapter.OnClickListener likeOnClickListener= new TweetsAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                final Long tweetId = tweets.get(position).id;
+                client.likeTweet(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        Toast.makeText(getApplicationContext(), "Liked!", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onSuccess to like");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        client.unlikeTweet(new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Toast.makeText(getApplicationContext(), "Unliked!", Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "onSuccess to unlike");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.i(TAG, "onFailure to unlike");
+                            }
+                        }, tweetId);
+                    }
+                }, tweetId);
+            }
+        };
+
         // Retweet or unretweet current tweet when retweet icon is clicked
         TweetsAdapter.OnClickListener retweetOnClickListener= new TweetsAdapter.OnClickListener() {
             @Override
@@ -106,10 +137,11 @@ public class TimelineActivity extends AppCompatActivity {
                 }, tweetId);
             }
         };
+
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
         client = TwitterApp.getRestClient(this);
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener);
+        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener, likeOnClickListener);
         layoutManager = new LinearLayoutManager(this);
 
         // Load more data as users scroll

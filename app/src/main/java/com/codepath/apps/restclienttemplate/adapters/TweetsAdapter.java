@@ -31,6 +31,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     private List<Tweet> tweets;
     private OnClickListener replyOnClickListener;
     private OnClickListener retweetOnClickListener;
+    private OnClickListener likeOnClickListener;
 
     @NonNull
     @Override
@@ -40,11 +41,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         return new ViewHolder(itemTweetBinding);
     }
 
-    public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener, OnClickListener retweetOnClickListener) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener, OnClickListener retweetOnClickListener,
+                         OnClickListener likeOnClickListener) {
         this.context = context;
         this.tweets = tweets;
         this.replyOnClickListener = replyOnClickListener;
         this.retweetOnClickListener = retweetOnClickListener;
+        this.likeOnClickListener = likeOnClickListener;
     }
 
     @Override
@@ -134,6 +137,21 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         decreaseNumericTextView(tvRetweetCount);
                     }
                     retweetOnClickListener.onClickListener(getAdapterPosition());
+                }
+            });
+
+            // Notify when like icon is clicked
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ivLike.getColorFilter() == null) {
+                        ivLike.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        increaseNumericTextView(tvLikeCount);
+                    } else {
+                        ivLike.setColorFilter(null);
+                        decreaseNumericTextView(tvLikeCount);
+                    }
+                    likeOnClickListener.onClickListener(getAdapterPosition());
                 }
             });
         }
