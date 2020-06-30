@@ -83,7 +83,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvName.setText(tweet.user.name);
             tvUsername.setText("@" + tweet.user.userName);
             tvTimeStamp.setText(tweet.createdAt);
-            Glide.with(context).load(tweet.user.imgUrl).into(ivProfileImage);
+            Glide.with(context).load(tweet.user.profileImgUrl).into(ivProfileImage);
             if (tweet.imgUrl != null) {
                 Glide.with(context).load(tweet.imgUrl).into(ivMedia);
             } else {
