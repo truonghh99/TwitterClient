@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,10 +17,12 @@ import java.util.Locale;
 @Parcel
 public class Tweet {
 
+    private static final String TAG = "Tweet Debug";
     public String body;
     public String createdAt;
     public User user;
     public long id;
+    public String imgUrl;
 
     // Empty constructor needed for parcel library
     public Tweet() {}
@@ -31,6 +34,21 @@ public class Tweet {
         tweet.createdAt = getRelativeTimeAgo(jsonObject.getString("created_at"));
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.id = jsonObject.getLong("id");
+        try {
+            JSONArray medias = jsonObject.getJSONObject("entities").getJSONArray("media");
+            for (int i = 0; i < medias.length(); ++i) {
+                JSONObject media = medias.getJSONObject(0);
+                if (media.getString("type").equalsIgnoreCase("photo")) {
+                    tweet.imgUrl = media.getString("media_url_https");
+                    break;
+                } else {
+                    tweet.imgUrl = null;
+                }
+            }
+        } catch (JSONException e) {
+            tweet.imgUrl = null;
+            Log.d(TAG, "Doesn't have image");
+        }
         return tweet;
     }
 

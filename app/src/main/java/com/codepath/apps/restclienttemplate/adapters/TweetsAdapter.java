@@ -66,6 +66,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvUsername;
         TextView tvName;
         TextView tvTimeStamp;
+        ImageView ivMedia;
 
         public ViewHolder(@NonNull ItemTweetBinding itemTweetBinding) {
             super(itemTweetBinding.getRoot());
@@ -74,6 +75,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvUsername = itemTweetBinding.tvUserName;
             tvName = itemTweetBinding.tvName;
             tvTimeStamp = itemTweetBinding.tvTimestamp;
+            ivMedia = itemTweetBinding.ivMedia;
         }
 
         public void bind(Tweet tweet) {
@@ -82,6 +84,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvUsername.setText("@" + tweet.user.userName);
             tvTimeStamp.setText(tweet.createdAt);
             Glide.with(context).load(tweet.user.imgUrl).into(ivProfileImage);
+            if (tweet.imgUrl != null) {
+                Glide.with(context).load(tweet.imgUrl).into(ivMedia);
+            } else {
+                // Avoid reusing image from last item in recycler view
+                ivMedia.setImageResource(0);
+            }
         }
     }
 }
