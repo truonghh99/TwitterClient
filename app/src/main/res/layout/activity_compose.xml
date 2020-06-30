@@ -7,27 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".activities.ComposeActivity">
 
-    <EditText
-        android:id="@+id/etCompose"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Heyy this is your tweet. Wanna publish it?"
-        android:inputType="textMultiLine"
-        android:minLines="5" />
+        app:counterEnabled="true"
+        app:counterMaxLength="280"
+        >
+        <EditText
+            android:id="@+id/etCompose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            tools:text="Heyy this is your tweet. Wanna publish it?" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etCompose"
+        android:layout_below="@id/textContainer"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="5dp"
         android:text="@string/tweet" />
+
 </RelativeLayout>
