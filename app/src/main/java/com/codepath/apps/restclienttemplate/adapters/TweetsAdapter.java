@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +30,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     private Context context;
     private List<Tweet> tweets;
     private OnClickListener replyOnClickListener;
+    private OnClickListener retweetOnClickListener;
 
     @NonNull
     @Override
@@ -38,10 +40,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         return new ViewHolder(itemTweetBinding);
     }
 
-    public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener, OnClickListener retweetOnClickListener) {
         this.context = context;
         this.tweets = tweets;
         this.replyOnClickListener = replyOnClickListener;
+        this.retweetOnClickListener = retweetOnClickListener;
     }
 
     @Override
@@ -118,6 +121,29 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     replyOnClickListener.onClickListener(getAdapterPosition());
                 }
             });
+
+            // Notify when retweet icon is clicked
+            ivRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ivRetweet.getColorFilter() == null) {
+                        ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_retweet), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        increaseNumericTextView(tvRetweetCount);
+                    } else {
+                        ivRetweet.setColorFilter(null);
+                        decreaseNumericTextView(tvRetweetCount);
+                    }
+                    retweetOnClickListener.onClickListener(getAdapterPosition());
+                }
+            });
         }
+    }
+
+    private void increaseNumericTextView(TextView tv) {
+        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) + 1));
+    }
+
+    private void decreaseNumericTextView(TextView tv) {
+        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) - 1));
     }
 }

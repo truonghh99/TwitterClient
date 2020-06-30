@@ -76,10 +76,40 @@ public class TimelineActivity extends AppCompatActivity {
             }
         };
 
+        // Retweet or unretweet current tweet when retweet icon is clicked
+        TweetsAdapter.OnClickListener retweetOnClickListener= new TweetsAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                final Long tweetId = tweets.get(position).id;
+                client.retweetTweet(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        Toast.makeText(getApplicationContext(), "Retweeted!", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onSuccess to retweet");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        client.unRetweetTweet(new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Toast.makeText(getApplicationContext(), "Unretweeted!", Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "onSuccess to untweet");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.i(TAG, "onFailure to untweet");
+                            }
+                        }, tweetId);
+                    }
+                }, tweetId);
+            }
+        };
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
         client = TwitterApp.getRestClient(this);
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets, replyOnClickListener);
+        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener);
         layoutManager = new LinearLayoutManager(this);
 
         // Load more data as users scroll
