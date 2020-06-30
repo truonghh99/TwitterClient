@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -63,9 +65,9 @@ public class TimelineActivity extends AppCompatActivity {
 
         Toolbar toolbar = activityTimelineBinding.toolbar;
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
-
         client = TwitterApp.getRestClient(this);
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);

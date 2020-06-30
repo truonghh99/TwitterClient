@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/miCompose"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/vector_compose_fab"
         android:title="miCompose"
         app:showAsAction="always" />
 

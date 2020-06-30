@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:layout_marginTop="15dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -64,4 +65,55 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/ivReply"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ivMedia"
+        android:layout_alignStart="@+id/ivMedia"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/ic_reply" />
+
+    <ImageView
+        android:id="@+id/ivRetweet"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ivMedia"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivReply"
+        app:srcCompat="@drawable/ic_retweet" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ivMedia"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/tvRetweetCounter"
+        app:srcCompat="@drawable/ic_like" />
+
+    <TextView
+        android:id="@+id/tvRetweetCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivMedia"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivRetweet"
+        tools:text="345" />
+
+    <TextView
+        android:id="@+id/tvLikeCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivMedia"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivLike"
+        tools:text="234253" />
+
 </RelativeLayout>
