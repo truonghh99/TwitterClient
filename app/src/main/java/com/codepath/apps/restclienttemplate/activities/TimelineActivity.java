@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +42,7 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
+    public static final String KEY_USER_NAME = "user_name";
     public final int MAX_TWEET_LENGTH = 140;
     public final String TAG = "TimelineActivity";
     private final int REQUEST_CODE = 20;
@@ -63,16 +64,25 @@ public class TimelineActivity extends AppCompatActivity {
         ActivityTimelineBinding activityTimelineBinding =  ActivityTimelineBinding.inflate(getLayoutInflater());
         setContentView(activityTimelineBinding.getRoot());
 
-        Toolbar toolbar = activityTimelineBinding.toolbar;
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setUpToolbar(activityTimelineBinding);
+
+        // Compose new tweet when reply icon is clicked
+        TweetsAdapter.OnClickListener replyOnClickListener= new TweetsAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
+                intent.putExtra(KEY_USER_NAME, tweets.get(position).user.userName);
+                startActivity(intent);
+            }
+        };
 
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
         client = TwitterApp.getRestClient(this);
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets);
+        adapter = new TweetsAdapter(this, tweets, replyOnClickListener);
         layoutManager = new LinearLayoutManager(this);
 
+        // Load more data as users scroll
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -80,14 +90,19 @@ public class TimelineActivity extends AppCompatActivity {
                 loadMoreData();
             }
         };
-
         rvTweets = activityTimelineBinding.rvTweets;
+        rvTweets.addOnScrollListener(scrollListener);
         rvTweets.setLayoutManager(layoutManager);
         rvTweets.setAdapter(adapter);
-        rvTweets.addOnScrollListener(scrollListener);
 
+        setUpSwipeContainer(activityTimelineBinding);
+
+        showInformationFromDataBase();
+        populateHomeTimeline();
+    }
+
+    private void setUpSwipeContainer(com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding activityTimelineBinding) {
         swipeContainer = activityTimelineBinding.swipeContainer;
-        // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -100,9 +115,12 @@ public class TimelineActivity extends AppCompatActivity {
                 populateHomeTimeline();
             }
         });
+    }
 
-        showInformationFromDataBase();
-        populateHomeTimeline();
+    private void setUpToolbar(com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding activityTimelineBinding) {
+        Toolbar toolbar = activityTimelineBinding.toolbar;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     private void showInformationFromDataBase() {

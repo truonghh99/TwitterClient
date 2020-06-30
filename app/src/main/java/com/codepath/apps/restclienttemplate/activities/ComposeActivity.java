@@ -32,6 +32,7 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etCompose;
     private Button btnTweet;
     private TwitterClient client;
+    private String tweetContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,19 @@ public class ComposeActivity extends AppCompatActivity {
         btnTweet = activityComposeBinding.btnTweet;
 
         btnTweet.setOnClickListener(publish);
+
+        try {
+            String replyUserName = getIntent().getExtras().getString(TimelineActivity.KEY_USER_NAME);
+            etCompose.setText("@" + replyUserName + " ");
+        } catch (Exception e) {
+            Log.e(TAG,"Can't identify replied user");
+        }
     }
 
     private final View.OnClickListener publish = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            final String tweetContent = etCompose.getText().toString();
+            tweetContent = etCompose.getText().toString();
             if (tweetContent.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Your tweet cannot be empty!", Toast.LENGTH_SHORT).show();
                 return;

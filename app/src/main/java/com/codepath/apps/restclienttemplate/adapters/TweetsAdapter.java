@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,14 @@ import java.util.List;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
 
+    public interface OnClickListener {
+        void onClickListener(int position);
+    }
+
     private final String TAG = "TweetsAdapter";
-    Context context;
-    List<Tweet> tweets;
+    private Context context;
+    private List<Tweet> tweets;
+    private OnClickListener replyOnClickListener;
 
     @NonNull
     @Override
@@ -32,9 +38,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         return new ViewHolder(itemTweetBinding);
     }
 
-    public TweetsAdapter(Context context, List<Tweet> tweets) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener) {
         this.context = context;
         this.tweets = tweets;
+        this.replyOnClickListener = replyOnClickListener;
     }
 
     @Override
@@ -69,6 +76,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivMedia;
         TextView tvRetweetCount;
         TextView tvLikeCount;
+        ImageView ivReply;
+        ImageView ivRetweet;
+        ImageView ivLike;
 
         public ViewHolder(@NonNull ItemTweetBinding itemTweetBinding) {
             super(itemTweetBinding.getRoot());
@@ -80,6 +90,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivMedia = itemTweetBinding.ivMedia;
             tvRetweetCount = itemTweetBinding.tvRetweetCounter;
             tvLikeCount = itemTweetBinding.tvLikeCounter;
+            ivReply = itemTweetBinding.ivReply;
+            ivRetweet = itemTweetBinding.ivRetweet;
+            ivLike = itemTweetBinding.ivLike;
         }
 
         public void bind(Tweet tweet) {
@@ -97,7 +110,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 // Avoid reusing image from last item in recycler view
                 ivMedia.setImageResource(0);
             }
-            Log.e(TAG, "binded");
+
+            // Notify when reply icon is clicked
+            ivReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    replyOnClickListener.onClickListener(getAdapterPosition());
+                }
+            });
         }
     }
 }
