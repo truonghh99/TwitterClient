@@ -98,7 +98,6 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.i(TAG, "Fetching new data");
                 Toast.makeText(getApplicationContext(), "Timeline updated!", Toast.LENGTH_SHORT).show();
                 populateHomeTimeline();
-                swipeContainer.setRefreshing(false);
             }
         });
 
@@ -147,13 +146,14 @@ public class TimelineActivity extends AppCompatActivity {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "onSuccess! " + json.toString());
+                Log.i(TAG, "onSuccess when populate HomeTimeline! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
                     tweetsFromNetwork = Tweet.fromJsonArray(jsonArray);
                     adapter.clear();
-                    adapter.addAll(tweets);
+                    adapter.addAll(tweetsFromNetwork);
                     adapter.notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
                     insertTweetsToDatabase();
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);

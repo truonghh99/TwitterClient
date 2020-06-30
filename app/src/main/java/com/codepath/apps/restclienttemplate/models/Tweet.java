@@ -45,6 +45,12 @@ public class Tweet {
     @ColumnInfo
     public String imgUrl;
 
+    @ColumnInfo
+    public Long numRetweet;
+
+    @ColumnInfo
+    public Long numLike;
+
     // Empty constructor needed for parcel library
     public Tweet() {}
 
@@ -55,6 +61,8 @@ public class Tweet {
         tweet.createdAt = getRelativeTimeAgo(jsonObject.getString("created_at"));
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.id = jsonObject.getLong("id");
+        tweet.numLike = jsonObject.getLong("favorite_count");
+        tweet.numRetweet = jsonObject.getLong("retweet_count");
         tweet.userId = tweet.user.id;
         try {
             JSONArray medias = jsonObject.getJSONObject("entities").getJSONArray("media");
