@@ -48,6 +48,7 @@ public class TimelineActivity extends AppCompatActivity {
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager layoutManager;
 
+    private MenuItem miActionProgressItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +99,7 @@ public class TimelineActivity extends AppCompatActivity {
         client.getNextPageOfTweets(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                showProgressBar();
                 Log.i(TAG, "Load more data onSuccess! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
@@ -106,6 +108,7 @@ public class TimelineActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
+                hideProgressBar();
             }
 
             @Override
@@ -152,6 +155,19 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        miActionProgressItem.setVisible(false);
     }
 
     @Override

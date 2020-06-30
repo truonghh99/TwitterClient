@@ -7,4 +7,12 @@
         android:icon="@android:drawable/ic_menu_edit"
         android:title="miCompose"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/miActionProgress"
+        android:orderInCategory="100"
+        android:title="Loading..."
+        android:visible="false"
+        app:actionLayout="@layout/action_view_progress"
+        app:showAsAction="always" />
 </menu>
