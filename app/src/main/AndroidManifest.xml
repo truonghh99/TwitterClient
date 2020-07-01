@@ -14,7 +14,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.DetailActivity"></activity>
-        <activity android:name=".activities.ComposeActivity" />
         <activity android:name=".activities.TimelineActivity" />
         <activity
             android:name=".activities.LoginActivity"
