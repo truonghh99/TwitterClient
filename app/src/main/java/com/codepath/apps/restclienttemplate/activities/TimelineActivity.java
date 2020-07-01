@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.activities;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +25,7 @@ import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
+import com.codepath.apps.restclienttemplate.fragment.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
@@ -82,9 +84,7 @@ public class TimelineActivity extends AppCompatActivity {
         TweetsAdapter.OnClickListener replyOnClickListener= new TweetsAdapter.OnClickListener() {
             @Override
             public void onClickListener(int position) {
-                Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
-                intent.putExtra(KEY_USER_NAME, tweets.get(position).user.userName);
-                startActivity(intent);
+                showComposeDialog();
             }
         };
 
@@ -173,6 +173,12 @@ public class TimelineActivity extends AppCompatActivity {
 
         showInformationFromDataBase();
         populateHomeTimeline();
+    }
+
+    private void showComposeDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Compose");
+        editNameDialogFragment.show(fm, "fragment_compose");
     }
 
     private void setUpSwipeContainer(com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding activityTimelineBinding) {
@@ -278,8 +284,7 @@ public class TimelineActivity extends AppCompatActivity {
         compose.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
+                showComposeDialog();
                 return false;
             }
         });
