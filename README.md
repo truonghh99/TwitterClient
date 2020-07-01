@@ -41,7 +41,7 @@ The following **stretch** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] User can view an account detail fragment by clicking at any profile on their timeline
 
 ## Video Walkthrough
 
