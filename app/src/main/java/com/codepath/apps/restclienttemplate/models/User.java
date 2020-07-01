@@ -63,7 +63,6 @@ public class User {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); ++i) {
             User user = fromJson(jsonArray.getJSONObject(i));
-            Log.e(TAG, user.toString());
             users.add(user);
         }
         return users;

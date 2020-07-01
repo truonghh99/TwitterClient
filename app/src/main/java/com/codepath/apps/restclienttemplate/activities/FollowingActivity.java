@@ -42,6 +42,7 @@ public class FollowingActivity extends AppCompatActivity {
     private TwitterClient client;
     private RecyclerView.LayoutManager layoutManager;
     private Long userId;
+    private Long cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
