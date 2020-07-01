@@ -6,6 +6,5 @@
         android:id="@+id/miHome"
         android:icon="@drawable/ic_vector_home"
         android:title="miCompose"
-        android:iconTint="@color/white"
         app:showAsAction="always" />
 </menu>
