@@ -3,13 +3,16 @@ package com.codepath.apps.restclienttemplate.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -27,7 +30,7 @@ import org.parceler.Parcels;
 
 import okhttp3.Headers;
 
-public class ComposeFragment extends DialogFragment {
+public class ComposeFragment extends DialogFragment implements TextView.OnEditorActionListener {
 
     private static final String TAG = "ComposeFragment";
     private EditText etCompose;
@@ -36,8 +39,25 @@ public class ComposeFragment extends DialogFragment {
     private TwitterClient client;
     private String targetUser;
     private ImageView ivClose;
+    private Tweet returnTweet;
 
     public ComposeFragment() {
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        if (EditorInfo.IME_ACTION_DONE == i) {
+            // Return input text back to activity through the implemented listener
+            ComposeFragmentListener listener = (ComposeFragmentListener) getActivity();
+            listener.onFinishComposeTweet(returnTweet);
+            // Close the dialog and return back to the parent activity
+            dismiss();
+            return true;
+        }
+        return false;    }
+
+    public interface ComposeFragmentListener {
+        void onFinishComposeTweet(Tweet returnTweet);
     }
 
     public static ComposeFragment newInstance(String targetUser) {
@@ -72,6 +92,7 @@ public class ComposeFragment extends DialogFragment {
         etCompose.requestFocus();
         btTweet.setOnClickListener(publish);
         ivClose.setOnClickListener(close);
+        btTweet.setOnEditorActionListener(this);
     }
 
     private final View.OnClickListener close = new View.OnClickListener() {
@@ -101,8 +122,10 @@ public class ComposeFragment extends DialogFragment {
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
                     Log.i(TAG, "onSuccess to publish tweet");
                     try {
-                        Tweet tweet = Tweet.fromJson(json.jsonObject);
+                        returnTweet = Tweet.fromJson(json.jsonObject);
                         Log.i(TAG, "Published tweet says: " + tweetContent);
+                        ComposeFragmentListener listener = (ComposeFragmentListener) getActivity();
+                        listener.onFinishComposeTweet(returnTweet);
                     } catch (JSONException e) {
                         Log.e(TAG, "Cannot extract tweet");
                     }
