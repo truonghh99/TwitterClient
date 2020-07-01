@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
@@ -46,10 +47,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     public static final String KEY_USER_NAME = "user_name";
     public static final String KEY_TWEET = "tweet";
+    private static final int REQUEST_CODE = 20;
 
-    public final int MAX_TWEET_LENGTH = 140;
     public final String TAG = "TimelineActivity";
-    private final int REQUEST_CODE = 20;
 
     private TwitterClient client;
     private RecyclerView rvTweets;
@@ -60,6 +60,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private LinearLayoutManager layoutManager;
     private TweetDao tweetDao;
     private List<Tweet> tweetsFromNetwork;
+    private int currentPosition;
 
     private MenuItem miActionProgressItem;
     @Override
@@ -76,7 +77,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public void onClickListener(int position) {
                 Intent intent = new Intent(TimelineActivity.this, DetailActivity.class);
                 intent.putExtra(KEY_TWEET, Parcels.wrap(tweets.get(position)));
-                startActivity(intent);
+                currentPosition = position;
+                startActivityForResult(intent, REQUEST_CODE);
             }
         };
 
@@ -92,30 +94,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         TweetsAdapter.OnClickListener likeOnClickListener= new TweetsAdapter.OnClickListener() {
             @Override
             public void onClickListener(int position) {
-                final Long tweetId = tweets.get(position).id;
-                client.likeTweet(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(getApplicationContext(), "Liked!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "onSuccess to like");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        client.unlikeTweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Toast.makeText(getApplicationContext(), "Unliked!", Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "onSuccess to unlike");
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.i(TAG, "onFailure to unlike");
-                            }
-                        }, tweetId);
-                    }
-                }, tweetId);
+                final Tweet tweet = tweets.get(position);
+                tweet.attemptToLike(client, TimelineActivity.this);
+                adapter.notifyItemChanged(position);
             }
         };
 
@@ -123,30 +104,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         TweetsAdapter.OnClickListener retweetOnClickListener= new TweetsAdapter.OnClickListener() {
             @Override
             public void onClickListener(int position) {
-                final Long tweetId = tweets.get(position).id;
-                client.retweetTweet(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(getApplicationContext(), "Retweeted!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "onSuccess to retweet");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        client.unRetweetTweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Toast.makeText(getApplicationContext(), "Unretweeted!", Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "onSuccess to untweet");
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.i(TAG, "onFailure to untweet");
-                            }
-                        }, tweetId);
-                    }
-                }, tweetId);
+                final Tweet tweet = tweets.get(position);
+                tweet.attemptToRetweet(client, TimelineActivity.this);
+                adapter.notifyItemChanged(position);
             }
         };
 
@@ -312,5 +272,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         tweets.add(0, returnTweet);
         adapter.notifyItemInserted(0);
         rvTweets.smoothScrollToPosition(0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            adapter.notifyItemChanged(currentPosition);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

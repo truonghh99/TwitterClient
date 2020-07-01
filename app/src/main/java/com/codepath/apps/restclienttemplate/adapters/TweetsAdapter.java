@@ -122,9 +122,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             }
 
             if (tweet.liked == true) {
-                ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
+                ivLike.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
             } else {
-                ivRetweet.setColorFilter(null);
+                ivLike.setColorFilter(null);
             }
 
             int radius = 30; // corner radius, higher value = more rounded
@@ -154,15 +154,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (tweet.retweeded == false) {
-                        tweet.retweeded = true;
-                        ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_retweet), android.graphics.PorterDuff.Mode.MULTIPLY);
-                        increaseNumericTextView(tvRetweetCount);
-                    } else {
-                        tweet.retweeded = false;
-                        ivRetweet.setColorFilter(null);
-                        decreaseNumericTextView(tvRetweetCount);
-                    }
                     retweetOnClickListener.onClickListener(getAdapterPosition());
                 }
             });
@@ -171,18 +162,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (tweet.liked == false) {
-                        tweet.liked = true;
-                        ivLike.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
-                        increaseNumericTextView(tvLikeCount);
-                    } else {
-                        tweet.liked = false;
-                        ivLike.setColorFilter(null);
-                        decreaseNumericTextView(tvLikeCount);
-                    }
                     likeOnClickListener.onClickListener(getAdapterPosition());
                 }
             });
+
 
             // Notify when tweet is clicked
             tvBody.setOnClickListener(new View.OnClickListener() {
@@ -192,13 +175,5 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 }
             });
         }
-    }
-
-    private void increaseNumericTextView(TextView tv) {
-        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) + 1));
-    }
-
-    private void decreaseNumericTextView(TextView tv) {
-        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) - 1));
     }
 }

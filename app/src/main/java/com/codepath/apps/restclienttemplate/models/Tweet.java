@@ -1,13 +1,22 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.content.Context;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.activities.DetailActivity;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.Headers;
 
 @Parcel
 @Entity(foreignKeys = @ForeignKey(entity=User.class, parentColumns="id", childColumns="userId"))
@@ -114,5 +125,71 @@ public class Tweet {
         }
 
         return relativeDate;
+    }
+
+    public void attemptToRetweet(final TwitterClient client, final Context context) {
+        if (retweeded == false) {
+            retweeded = true;
+            ++numRetweet;
+        } else {
+            retweeded = false;
+            --numRetweet;
+        }
+        client.retweetTweet(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Toast.makeText(context, "Retweed!", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "onSuccess to retweet");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                client.unRetweetTweet(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        Toast.makeText(context, "Unretweed!", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onSuccess to unretweet");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        Log.i(TAG, "onFailure to unretweet: " + response);
+                    }
+                }, id);
+            }
+        }, id);
+    }
+
+    public void attemptToLike(final TwitterClient client, final Context context) {
+        if (liked == false) {
+            liked = true;
+            ++numLike;
+        } else {
+            liked = false;
+            --numLike;
+        }
+        client.likeTweet(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Toast.makeText(context, "Liked!", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "onSuccess to like");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                client.unlikeTweet(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        Toast.makeText(context, "Unliked!", Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onSuccess to unliked");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        Log.i(TAG, "onFailure to unliked");
+                    }
+                }, id);
+            }
+        }, id);
     }
 }

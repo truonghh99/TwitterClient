@@ -75,15 +75,15 @@ public class DetailActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient(this);
 
 
-        final Tweet tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(TimelineActivity.KEY_TWEET));
+        tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(TimelineActivity.KEY_TWEET));
         Log.e(TAG, tweet.toString());
 
         tvBody.setText(tweet.body);
         tvName.setText(tweet.user.name);
         tvUsername.setText("@" + tweet.user.userName);
         tvTimeStamp.setText(tweet.createdAt);
-        tvRetweetCount.setText(convertNumericValToString(tweet.numRetweet, "RETWEETS"));
-        tvLikeCount.setText(convertNumericValToString(tweet.numLike, "FAVORITES"));
+        updateRetweetStatus();
+        updateLikeStatus();
 
         int radius = 30; // corner radius, higher value = more rounded
         int margin = 0; // crop margin, set to 0 for corners with no crop
@@ -100,7 +100,6 @@ public class DetailActivity extends AppCompatActivity {
             ivMedia.setImageResource(0);
         }
 
-        // Notify when reply icon is clicked
         ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,94 +107,41 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        // Notify when retweet icon is clicked
         ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long num = readNumericValFromTv(tvRetweetCount, "RETWEETS");
-                if (ivRetweet.getColorFilter() == null) {
-                    ivRetweet.setColorFilter(ContextCompat.getColor(DetailActivity.this, R.color.inline_action_retweet), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    tvRetweetCount.setText(convertNumericValToString(num + 1, "RETWEETS"));
-                } else {
-                    ivRetweet.setColorFilter(null);
-                    tvRetweetCount.setText(convertNumericValToString(num - 1, "RETWEETS"));
-                }
-                client.likeTweet(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(getApplicationContext(), "Retweed!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "onSuccess to retweet");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        client.unlikeTweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Toast.makeText(getApplicationContext(), "Unretweed!", Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "onSuccess to unretweet");
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.i(TAG, "onFailure to unretweet");
-                            }
-                        }, tweet.id);
-                    }
-                }, tweet.id);
+                tweet.attemptToRetweet(client, DetailActivity.this);
+                updateRetweetStatus();
             }
         });
 
-        // Notify when like icon is clicked
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long num = readNumericValFromTv(tvLikeCount, "FAVORITES");
-                if (ivLike.getColorFilter() == null) {
-                    ivLike.setColorFilter(ContextCompat.getColor(DetailActivity.this, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    tvLikeCount.setText(convertNumericValToString(num + 1, "FAVORITES"));
-                } else {
-                    ivLike.setColorFilter(null);
-                    tvLikeCount.setText(convertNumericValToString(num - 1, "FAVORITES"));
-                }
-                client.likeTweet(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(getApplicationContext(), "Liked!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "onSuccess to like");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        client.unlikeTweet(new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                                Toast.makeText(getApplicationContext(), "Unliked!", Toast.LENGTH_SHORT).show();
-                                Log.i(TAG, "onSuccess to unlike");
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                                Log.i(TAG, "onFailure to unlike");
-                            }
-                        }, tweet.id);
-                    }
-                }, tweet.id);
+                tweet.attemptToLike(client, DetailActivity.this);
+                updateLikeStatus();
             }
         });
     }
 
-    private long readNumericValFromTv(TextView tv, String noun) {
-        String text = tv.getText().toString();
-        Log.e(TAG, text);
-        int lastNumberPos = text.length() - noun.length() - 1;
-        long num = Integer.parseInt(text.substring(0, lastNumberPos));
-        return num;
+    private void updateRetweetStatus() {
+        tvRetweetCount.setText(tweet.numRetweet + " RETWEETS");
+        if (tweet.retweeded == true) {
+            ivRetweet.setColorFilter(ContextCompat.getColor(this, R.color.inline_action_retweet), android.graphics.PorterDuff.Mode.MULTIPLY);
+        } else {
+            ivRetweet.setColorFilter(null);
+        }
     }
 
-    private String convertNumericValToString(long num, String noun) {
-        return "" + num + " " + noun;
+    private void updateLikeStatus() {
+        tvLikeCount.setText(tweet.numLike + " FAVORITES");
+        if (tweet.liked == true) {
+            ivLike.setColorFilter(ContextCompat.getColor(this, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
+        } else {
+            ivLike.setColorFilter(null);
+        }
     }
+
 
     private void setUpToolbar(com.codepath.apps.restclienttemplate.databinding.ActivityDetailBinding activityDetailBinding) {
         Toolbar toolbar = activityDetailBinding.toolbar;
