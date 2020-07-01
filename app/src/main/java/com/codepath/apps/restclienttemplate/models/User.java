@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -16,6 +18,7 @@ import java.util.List;
 @Entity
 public class User {
 
+    public static final String TAG = "UserModel";
     @ColumnInfo
     @PrimaryKey
     public Long id;
@@ -56,9 +59,12 @@ public class User {
 
     // Extract user's information from the given JSON Array
     public static List<User> fromJsonArray(JSONArray jsonArray) throws JSONException {
+        Log.e(TAG, "start extracting");
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < users.size(); ++i) {
-            users.add(fromJson(jsonArray.getJSONObject(i)));
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            User user = fromJson(jsonArray.getJSONObject(i));
+            Log.e(TAG, user.toString());
+            users.add(user);
         }
         return users;
     }

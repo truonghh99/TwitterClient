@@ -60,15 +60,16 @@ public class FollowersActivity extends AppCompatActivity {
         client.getFollowers(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "onSuccess when populate follower list! " + json.toString());
                 JSONArray jsonArray = null;
                 try {
                     jsonArray = json.jsonObject.getJSONArray("users");
+                    Log.i(TAG, "onSuccess when populate follower list! " + jsonArray.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 try {
                     users = User.fromJsonArray(jsonArray);
+                    Log.i(TAG, String.valueOf(users.size()));
                     usersAdapter.addAll(users);
                     usersAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {

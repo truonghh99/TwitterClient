@@ -29,7 +29,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
 
-    private final String TAG = "TweetsAdapter";
+    private final String TAG = "UsersAdapter";
     private Context context;
     private List<User> users;
 
@@ -92,6 +92,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     .load(user.profileImgUrl)
                     .transform(new RoundedCornersTransformation(radius, margin))
                     .into(ivProfileImage);
+            Log.e(TAG, "BINDED");
         }
     }
 }
