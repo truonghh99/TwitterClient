@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
@@ -51,6 +52,15 @@ public class User {
         user.followingCount = jsonObject.getString("friends_count");
         user.description = jsonObject.getString("description");
         return user;
+    }
+
+    // Extract user's information from the given JSON Array
+    public static List<User> fromJsonArray(JSONArray jsonArray) throws JSONException {
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < users.size(); ++i) {
+            users.add(fromJson(jsonArray.getJSONObject(i)));
+        }
+        return users;
     }
 
     public static List<User> fromJsonTweetArray(List<Tweet> tweetsFromNetwork) {

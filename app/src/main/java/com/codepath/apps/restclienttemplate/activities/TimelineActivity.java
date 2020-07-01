@@ -46,7 +46,7 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
 
-    public static final String KEY_USER_NAME = "user_name";
+    public static final String KEY_USER_ID = "user_ID";
     public static final String KEY_TWEET = "tweet";
     private static final int REQUEST_CODE = 20;
 

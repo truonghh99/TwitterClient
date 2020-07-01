@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.activities.DetailActivity;
+import com.codepath.apps.restclienttemplate.activities.FollowersActivity;
+import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.databinding.FragmentUserBinding;
 import com.codepath.apps.restclienttemplate.models.User;
 
@@ -40,6 +43,8 @@ public class UserFragment extends DialogFragment {
     private TextView tvDescription;
     private TextView tvFollowingCount;
     private TextView tvFollowerCount;
+    private TextView tvFollower;
+    private TextView tvFollowing;
 
     public UserFragment() {
     }
@@ -61,6 +66,8 @@ public class UserFragment extends DialogFragment {
         tvDescription = (TextView) view.findViewById(R.id.tvDescription);
         tvFollowerCount = (TextView) view.findViewById(R.id.tvNumFollowers);
         tvFollowingCount = (TextView) view.findViewById(R.id.tvNumFollowing);
+        tvFollower = (TextView) view.findViewById(R.id.tvFollowers);
+        tvFollowing = (TextView) view.findViewById(R.id.tvFollowing);
 
         tvName.setText(user.name);
         tvUsername.setText("@" + user.userName);
@@ -75,6 +82,15 @@ public class UserFragment extends DialogFragment {
                 .load(user.profileImgUrl)
                 .transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivProfileImage);
+
+        tvFollower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), FollowersActivity.class);
+                intent.putExtra(TimelineActivity.KEY_USER_ID, user.id);
+                startActivity(intent);
+            }
+        });
 
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
