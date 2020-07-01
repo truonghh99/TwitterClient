@@ -277,6 +277,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            Tweet changedTweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+            tweets.set(currentPosition, changedTweet);
+            Log.e(TAG, "Updated tweet at position " + currentPosition);
             adapter.notifyItemChanged(currentPosition);
         }
         super.onActivityResult(requestCode, resultCode, data);

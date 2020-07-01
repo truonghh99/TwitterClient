@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,7 +75,6 @@ public class DetailActivity extends AppCompatActivity {
         ivRetweet = activityDetailBinding.ivRetweet;
         ivLike = activityDetailBinding.ivLike;
         client = TwitterApp.getRestClient(this);
-
 
         tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(TimelineActivity.KEY_TWEET));
         Log.e(TAG, tweet.toString());
@@ -140,6 +141,24 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             ivLike.setColorFilter(null);
         }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        MenuItem miHome = menu.findItem(R.id.miHome);
+
+        miHome.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent();
+                intent.putExtra("tweet", Parcels.wrap(tweet));
+                setResult(RESULT_OK, intent);
+                finish();
+                return true;
+            }
+        });
+
+        return true;
     }
 
 
