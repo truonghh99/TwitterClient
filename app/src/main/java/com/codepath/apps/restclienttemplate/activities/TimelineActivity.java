@@ -62,6 +62,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private TweetDao tweetDao;
     private List<Tweet> tweetsFromNetwork;
     private int currentPosition;
+    private boolean offlineMode = false;
 
     private MenuItem miActionProgressItem;
     @Override
@@ -167,8 +168,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             @Override
             public void onRefresh() {
                 Log.i(TAG, "Fetching new data");
-                Toast.makeText(getApplicationContext(), "Timeline updated!", Toast.LENGTH_SHORT).show();
                 populateHomeTimeline();
+                swipeContainer.setRefreshing(false);
             }
         });
     }
@@ -210,16 +211,19 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                offlineMode = true;
                 Log.i(TAG, "onFailure! " + response, throwable);
 
             }
         }, tweets.get(tweets.size() - 1).id);
+        if (offlineMode) announceOfflineMode();
     }
 
     private void populateHomeTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                showProgressBar();
                 Log.i(TAG, "onSuccess when populate HomeTimeline! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
@@ -232,13 +236,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
+                hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                offlineMode = true;
                 Log.i(TAG, "onFailure! " + response, throwable);
             }
         });
+        if (offlineMode) announceOfflineMode();
+    }
+
+    public void announceOfflineMode() {
+        Toast.makeText(getApplicationContext(),"Offline mode - cannot load data right now", Toast.LENGTH_SHORT).show();
     }
 
     private void insertTweetsToDatabase() {
