@@ -1,30 +1,47 @@
 package com.codepath.apps.restclienttemplate.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterApp;
+import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
+import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.parceler.Parcels;
+
+import okhttp3.Headers;
 
 public class ComposeFragment extends DialogFragment {
 
     private static final String TAG = "ComposeFragment";
     private EditText etCompose;
+    private Button btTweet;
+    private String tweetContent;
+    private TwitterClient client;
+    private String targetUser;
+
     public ComposeFragment() {
     }
 
-    public static ComposeFragment newInstance(String title) {
-        Log.e(TAG, "In fragment");
+    public static ComposeFragment newInstance(String targetUser) {
         ComposeFragment frag = new ComposeFragment();
         Bundle args = new Bundle();
-        args.putString("Compose New Tweet", title);
+        args.putString("Reply", targetUser);
         frag.setArguments(args);
         return frag;
     }
@@ -40,12 +57,54 @@ public class ComposeFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         // Get field from view
         etCompose = (EditText) view.findViewById(R.id.etCompose);
+        btTweet = (Button) view.findViewById(R.id.btnTweet);
+        client = TwitterApp.getRestClient(getActivity());
+
         // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "What's going on?");
-        getDialog().setTitle(title);
-        // Show soft keyboard automatically and request focus to field
+        targetUser = getArguments().getString("Reply");
+        if (targetUser != "") {
+            etCompose.setText("@" + targetUser + " ");
+            btTweet.setText("Reply");
+        }
         etCompose.requestFocus();
-        getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        btTweet.setOnClickListener(publish);
     }
+
+    private final View.OnClickListener publish = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            tweetContent = etCompose.getText().toString();
+            if (tweetContent.isEmpty()) {
+                Toast.makeText(getActivity(), "Your tweet is empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (tweetContent.length() > 280) {
+                Toast.makeText(getActivity(), "Your tweet is too long!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            client.publishTweet(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.i(TAG, "onSuccess to publish tweet");
+                    try {
+                        Tweet tweet = Tweet.fromJson(json.jsonObject);
+                        Log.i(TAG, "Published tweet says: " + tweetContent);
+                        getActivity().onBackPressed();
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Cannot extract tweet");
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.e(TAG, "onFailure to publish tweet", throwable);
+                }
+            }, tweetContent);
+            if (targetUser.isEmpty()) {
+                Toast.makeText(getActivity(), "Tweeted!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Replied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 }

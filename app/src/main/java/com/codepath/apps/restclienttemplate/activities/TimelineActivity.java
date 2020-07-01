@@ -84,7 +84,7 @@ public class TimelineActivity extends AppCompatActivity {
         TweetsAdapter.OnClickListener replyOnClickListener= new TweetsAdapter.OnClickListener() {
             @Override
             public void onClickListener(int position) {
-                showComposeDialog();
+                showComposeDialog(tweets.get(position).user.userName);
             }
         };
 
@@ -175,9 +175,9 @@ public class TimelineActivity extends AppCompatActivity {
         populateHomeTimeline();
     }
 
-    private void showComposeDialog() {
+    private void showComposeDialog(String targetUser) {
         FragmentManager fm = getSupportFragmentManager();
-        ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Compose");
+        ComposeFragment editNameDialogFragment = ComposeFragment.newInstance(targetUser);
         editNameDialogFragment.show(fm, "fragment_compose");
     }
 
@@ -284,7 +284,7 @@ public class TimelineActivity extends AppCompatActivity {
         compose.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                showComposeDialog();
+                showComposeDialog("");
                 return false;
             }
         });
