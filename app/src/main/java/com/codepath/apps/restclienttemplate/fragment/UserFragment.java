@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.activities.DetailActivity;
 import com.codepath.apps.restclienttemplate.activities.FollowersActivity;
+import com.codepath.apps.restclienttemplate.activities.FollowingActivity;
 import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.databinding.FragmentUserBinding;
 import com.codepath.apps.restclienttemplate.models.User;
@@ -83,14 +84,29 @@ public class UserFragment extends DialogFragment {
                 .transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivProfileImage);
 
-        tvFollower.setOnClickListener(new View.OnClickListener() {
+        final View.OnClickListener followerOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FollowersActivity.class);
                 intent.putExtra(TimelineActivity.KEY_USER_ID, user.id);
                 startActivity(intent);
             }
-        });
+        };
+
+        View.OnClickListener followingOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), FollowingActivity.class);
+                intent.putExtra(TimelineActivity.KEY_USER_ID, user.id);
+                startActivity(intent);
+            }
+        };
+
+        tvFollower.setOnClickListener(followerOnClickListener);
+        tvFollowerCount.setOnClickListener(followerOnClickListener);
+
+        tvFollowing.setOnClickListener(followingOnClickListener);
+        tvFollowingCount.setOnClickListener(followingOnClickListener);
 
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
