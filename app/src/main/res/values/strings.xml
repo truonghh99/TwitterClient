@@ -6,5 +6,7 @@
     <string name="intent_scheme">oauth</string>
     <string name="intent_host">cprest</string>
     <string name="tweet">Tweet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
