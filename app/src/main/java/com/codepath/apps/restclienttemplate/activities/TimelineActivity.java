@@ -27,6 +27,7 @@ import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.fragment.ComposeFragment;
+import com.codepath.apps.restclienttemplate.fragment.UserFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
@@ -71,6 +72,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
         setUpToolbar(activityTimelineBinding);
 
+        // Open user fragment when a user is clicked
+        TweetsAdapter.OnClickListener userOnClickListener= new TweetsAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                showUserDialog(tweets.get(position).user);
+            }
+        };
+
         // Open detail view when a tweet is clicked
         TweetsAdapter.OnClickListener tweetOnClickListener= new TweetsAdapter.OnClickListener() {
             @Override
@@ -113,7 +122,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
         client = TwitterApp.getRestClient(this);
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener, likeOnClickListener, tweetOnClickListener);
+        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener, likeOnClickListener, tweetOnClickListener, userOnClickListener);
         layoutManager = new LinearLayoutManager(this);
 
         // Load more data as users scroll
@@ -138,8 +147,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     private void showComposeDialog(String targetUser) {
         FragmentManager fm = getSupportFragmentManager();
-        ComposeFragment editNameDialogFragment = ComposeFragment.newInstance(targetUser);
-        editNameDialogFragment.show(fm, "fragment_compose");
+        ComposeFragment composeFragment = ComposeFragment.newInstance(targetUser);
+        composeFragment.show(fm, "fragment_compose");
+    }
+
+    private void showUserDialog(User user) {
+        FragmentManager fm = getSupportFragmentManager();
+        UserFragment userFragment = UserFragment.newInstance(user);
+        userFragment.show(fm, "fragmentUser");
     }
 
     private void setUpSwipeContainer(com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding activityTimelineBinding) {

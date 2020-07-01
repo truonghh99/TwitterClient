@@ -28,6 +28,15 @@ public class User {
     @ColumnInfo
     public String profileImgUrl;
 
+    @ColumnInfo
+    public String followersCount;
+
+    @ColumnInfo
+    public String followingCount;
+
+    @ColumnInfo
+    public String description;
+
     // Empty constructor needed for parcel library
     public User() {}
 
@@ -38,6 +47,9 @@ public class User {
         user.name = jsonObject.getString("name");
         user.profileImgUrl = jsonObject.getString("profile_image_url_https");
         user.id = jsonObject.getLong("id");
+        user.followersCount = jsonObject.getString("followers_count");
+        user.followingCount = jsonObject.getString("friends_count");
+        user.description = jsonObject.getString("description");
         return user;
     }
 

@@ -8,82 +8,102 @@
     android:layout_margin="0dp"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="false"
-        android:layout_centerHorizontal="true"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivProfileImage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:text="Ha Truong" />
-
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:textSize="15dp"
-        android:textStyle="italic"
-        tools:text="@hatruong99" />
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUserName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp">
+        android:layout_centerInParent="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp">
+
+        <ImageView
+            android:id="@+id/ivProfileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="false"
+            android:layout_centerHorizontal="true"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvNumFollowing"
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:layout_below="@+id/ivProfileImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textSize="23dp"
             android:textStyle="bold"
-            tools:text="1000" />
+            tools:text="Ha Truong" />
 
         <TextView
-            android:id="@+id/tvFollowing"
+            android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/tvNumFollowing"
-            android:text="Following"
-            android:textSize="15dp"
-            tools:text="Following" />
+            android:layout_below="@+id/tvName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textSize="18dp"
+            tools:text="@hatruong99" />
 
         <TextView
-            android:id="@+id/tvNumFollowers"
+            android:id="@+id/tvDescription"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:textSize="15dp"
+            android:textStyle="italic"
+            tools:text="The Real Twitter API. Tweets about API changes, service issues and our Developer Platform. Don't get an answer? It's on my website." />
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/tvFollowing"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            tools:text="13678" />
+            android:layout_below="@+id/tvDescription"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
 
-        <TextView
-            android:id="@+id/tvFollowers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/tvNumFollowers"
-            android:text="Following"
-            android:textSize="15dp"
-            tools:text="Followers" />
+            <TextView
+                android:id="@+id/tvNumFollowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                tools:text="1000" />
 
+            <TextView
+                android:id="@+id/tvFollowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/tvNumFollowing"
+                android:text="Following"
+                android:textSize="15dp"
+                tools:text="Following" />
+
+            <TextView
+                android:id="@+id/tvNumFollowers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tvFollowing"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                tools:text="13678" />
+
+            <TextView
+                android:id="@+id/tvFollowers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/tvNumFollowers"
+                android:text="Followers"
+                android:textSize="15dp"
+                tools:text="Followers" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

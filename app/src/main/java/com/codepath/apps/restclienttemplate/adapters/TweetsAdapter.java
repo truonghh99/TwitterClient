@@ -37,7 +37,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     private OnClickListener retweetOnClickListener;
     private OnClickListener likeOnClickListener;
     private OnClickListener tweetOnClickListener;
-
+    private OnClickListener userOnClickListener;
 
     @NonNull
     @Override
@@ -48,13 +48,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener, OnClickListener retweetOnClickListener,
-                         OnClickListener likeOnClickListener, OnClickListener tweetOnClickListener) {
+                         OnClickListener likeOnClickListener, OnClickListener tweetOnClickListener, OnClickListener userOnClickListener) {
         this.context = context;
         this.tweets = tweets;
         this.replyOnClickListener = replyOnClickListener;
         this.retweetOnClickListener = retweetOnClickListener;
         this.likeOnClickListener = likeOnClickListener;
         this.tweetOnClickListener = tweetOnClickListener;
+        this.userOnClickListener = userOnClickListener;
     }
 
     @Override
@@ -175,6 +176,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     tweetOnClickListener.onClickListener(getAdapterPosition());
+                }
+            });
+
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    userOnClickListener.onClickListener(getAdapterPosition());
                 }
             });
         }
