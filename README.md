@@ -2,7 +2,7 @@
 
 **Simple Twitter** is an android app that allows a user to view their Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **10** hours spent in total
+Time spent: **22** hours spent in total
 
 ## User Stories
 
@@ -30,7 +30,7 @@ The following **stretch** features are implemented:
 * [x] User can tap a tweet to **open a detailed tweet view**
   * [x] User can **take favorite (and unfavorite) or reweet** actions on a tweet
 * [x] User can view more tweets as they scroll with infinite pagination
-* [ ] Compose tweet functionality is build using modal overlay
+* [x] Compose tweet functionality is build using modal overlay
 * [ ] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser with relevant page opened.
 * [x] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.org/android/Using-Parceler).
 * [x] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.org/android/Drawables#vector-drawables) where appropriate.
