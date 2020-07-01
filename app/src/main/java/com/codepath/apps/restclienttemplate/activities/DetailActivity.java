@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.databinding.ActivityComposeBinding;
 import com.codepath.apps.restclienttemplate.databinding.ActivityDetailBinding;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
+import com.codepath.apps.restclienttemplate.fragment.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -102,9 +104,7 @@ public class DetailActivity extends AppCompatActivity {
         ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DetailActivity.this, ComposeActivity.class);
-                intent.putExtra(TimelineActivity.KEY_USER_NAME, tweet.user.userName);
-                startActivity(intent);
+                showComposeDialog(tweet.user.userName);
             }
         });
 
@@ -201,5 +201,11 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = activityDetailBinding.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    private void showComposeDialog(String targetUser) {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeFragment editNameDialogFragment = ComposeFragment.newInstance(targetUser);
+        editNameDialogFragment.show(fm, "fragment_compose");
     }
 }
