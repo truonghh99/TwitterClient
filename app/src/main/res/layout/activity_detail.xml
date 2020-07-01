@@ -4,26 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:layout_margin="50dp"
     android:layout_marginTop="15dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/twitter_blue"
+        android:minHeight="?attr/actionBarSize"
+        app:logo="@mipmap/ic_twitter_logo"
+        app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/ivProfileImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/toolbar"
         android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/toolbar"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         tools:text="Ha Truong" />
 
@@ -32,8 +43,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfileImage"
-        android:layout_marginTop="5dp"
-        android:textSize="16sp"
+        android:layout_alignStart="@+id/ivProfileImage"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
         tools:text="This is my tweet!" />
 
     <TextView
@@ -44,18 +57,18 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:textSize="16sp"
+        android:textSize="15sp"
         tools:text="@hatruong99" />
 
     <TextView
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/toolbar"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="5dp"
-        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="15sp"
         tools:text="9h" />
 
     <ImageView
@@ -63,9 +76,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvBody"
-        android:layout_alignStart="@+id/tvBody"
+        android:layout_alignStart="@+id/ivProfileImage"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
@@ -74,8 +89,8 @@
         android:layout_height="30dp"
         android:layout_below="@+id/tvRetweetCounter"
         android:layout_alignStart="@+id/ivMedia"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
         app:srcCompat="@drawable/ic_reply" />
 
     <ImageView
@@ -84,7 +99,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/tvRetweetCounter"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/ivReply"
         app:srcCompat="@drawable/ic_retweet" />
 
@@ -94,7 +109,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/tvRetweetCounter"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/ivRetweet"
         app:srcCompat="@drawable/ic_like" />
 
@@ -103,10 +118,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivMedia"
-        android:layout_marginStart="10dp"
+        android:layout_alignStart="@+id/ivMedia"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:textSize="16sp"
+        android:textSize="15sp"
         tools:text="345 RETWEETS" />
 
     <TextView
@@ -114,48 +129,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivMedia"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/tvRetweetCounter"
-        android:textSize="16sp"
+        android:textSize="15sp"
         tools:text="234253 FAVORITES" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvRetweetCounter"
-        android:layout_marginTop="150dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="280">
-
-        <EditText
-            android:id="@+id/etCompose"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ivLike"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="170dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:minLines="5"
-            tools:text="@hatruong99 Hey this is cool!" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btnTweet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textContainer"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
-        android:background="@color/twitter_blue_fill_pressed"
-        android:backgroundTint="@color/twitter_blue_fill_pressed"
-        android:text="@string/tweet"
-        android:textColor="#FFFFFF" />
 </RelativeLayout>

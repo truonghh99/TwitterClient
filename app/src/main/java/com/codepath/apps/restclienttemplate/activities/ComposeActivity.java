@@ -33,6 +33,7 @@ public class ComposeActivity extends AppCompatActivity {
     private Button btnTweet;
     private TwitterClient client;
     private String tweetContent;
+    String replyUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class ComposeActivity extends AppCompatActivity {
         btnTweet.setOnClickListener(publish);
 
         try {
-            String replyUserName = getIntent().getExtras().getString(TimelineActivity.KEY_USER_NAME);
+            replyUserName = getIntent().getExtras().getString(TimelineActivity.KEY_USER_NAME);
             etCompose.setText("@" + replyUserName + " ");
         } catch (Exception e) {
             Log.e(TAG,"Can't identify replied user");
@@ -87,7 +88,11 @@ public class ComposeActivity extends AppCompatActivity {
                     Log.e(TAG, "onFailure to publish tweet", throwable);
                 }
             }, tweetContent);
-            Toast.makeText(getApplicationContext(), "Tweeted!", Toast.LENGTH_SHORT).show();
+            if (replyUserName.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Tweeted!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Replied!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }

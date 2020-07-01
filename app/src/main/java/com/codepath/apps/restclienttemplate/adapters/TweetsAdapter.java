@@ -32,6 +32,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     private OnClickListener replyOnClickListener;
     private OnClickListener retweetOnClickListener;
     private OnClickListener likeOnClickListener;
+    private OnClickListener tweetOnClickListener;
+
 
     @NonNull
     @Override
@@ -42,12 +44,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener replyOnClickListener, OnClickListener retweetOnClickListener,
-                         OnClickListener likeOnClickListener) {
+                         OnClickListener likeOnClickListener, OnClickListener tweetOnClickListener) {
         this.context = context;
         this.tweets = tweets;
         this.replyOnClickListener = replyOnClickListener;
         this.retweetOnClickListener = retweetOnClickListener;
         this.likeOnClickListener = likeOnClickListener;
+        this.tweetOnClickListener = tweetOnClickListener;
     }
 
     @Override
@@ -152,6 +155,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         decreaseNumericTextView(tvLikeCount);
                     }
                     likeOnClickListener.onClickListener(getAdapterPosition());
+                }
+            });
+
+            // Notify when tweet is clicked
+            tvBody.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tweetOnClickListener.onClickListener(getAdapterPosition());
                 }
             });
         }

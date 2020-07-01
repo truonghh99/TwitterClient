@@ -43,6 +43,8 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     public static final String KEY_USER_NAME = "user_name";
+    public static final String KEY_TWEET = "tweet";
+
     public final int MAX_TWEET_LENGTH = 140;
     public final String TAG = "TimelineActivity";
     private final int REQUEST_CODE = 20;
@@ -65,6 +67,16 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(activityTimelineBinding.getRoot());
 
         setUpToolbar(activityTimelineBinding);
+
+        // Open detail view when a tweet is clicked
+        TweetsAdapter.OnClickListener tweetOnClickListener= new TweetsAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                Intent intent = new Intent(TimelineActivity.this, DetailActivity.class);
+                intent.putExtra(KEY_TWEET, Parcels.wrap(tweets.get(position)));
+                startActivity(intent);
+            }
+        };
 
         // Compose new tweet when reply icon is clicked
         TweetsAdapter.OnClickListener replyOnClickListener= new TweetsAdapter.OnClickListener() {
@@ -141,7 +153,7 @@ public class TimelineActivity extends AppCompatActivity {
         tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
         client = TwitterApp.getRestClient(this);
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener, likeOnClickListener);
+        adapter = new TweetsAdapter(this, tweets, replyOnClickListener, retweetOnClickListener, likeOnClickListener, tweetOnClickListener);
         layoutManager = new LinearLayoutManager(this);
 
         // Load more data as users scroll
