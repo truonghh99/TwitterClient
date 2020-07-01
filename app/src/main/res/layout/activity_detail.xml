@@ -12,9 +12,38 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/twitter_blue"
-        android:minHeight="?attr/actionBarSize"
-        app:logo="@mipmap/ic_twitter_logo"
-        app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
+        android:maxHeight="?attr/actionBarSize"
+        app:titleTextColor="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            app:srcCompat="@mipmap/ic_twitter_logo" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/logo_image"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="48dp"
+            android:layout_marginTop="6dp"
+            android:scaleType="centerInside"
+            android:text="Tweet"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -47,6 +76,8 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:textSize="15sp"
+        android:autoLink="all"
+        android:linksClickable="true"
         tools:text="This is my tweet!" />
 
     <TextView
