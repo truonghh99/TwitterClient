@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -91,6 +92,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivReply;
         ImageView ivRetweet;
         ImageView ivLike;
+        RelativeLayout layoutTweet;
 
         public ViewHolder(@NonNull ItemTweetBinding itemTweetBinding) {
             super(itemTweetBinding.getRoot());
@@ -105,6 +107,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivReply = itemTweetBinding.ivReply;
             ivRetweet = itemTweetBinding.ivRetweet;
             ivLike = itemTweetBinding.ivLike;
+            layoutTweet = itemTweetBinding.layoutTweet;
         }
 
         public void bind(final Tweet tweet) {
@@ -168,7 +171,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
 
             // Notify when tweet is clicked
-            tvBody.setOnClickListener(new View.OnClickListener() {
+            layoutTweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     tweetOnClickListener.onClickListener(getAdapterPosition());
