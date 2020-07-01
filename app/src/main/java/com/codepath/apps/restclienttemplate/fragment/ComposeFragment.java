@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class ComposeFragment extends DialogFragment {
     private String tweetContent;
     private TwitterClient client;
     private String targetUser;
+    private ImageView ivClose;
 
     public ComposeFragment() {
     }
@@ -59,6 +61,7 @@ public class ComposeFragment extends DialogFragment {
         etCompose = (EditText) view.findViewById(R.id.etCompose);
         btTweet = (Button) view.findViewById(R.id.btnTweet);
         client = TwitterApp.getRestClient(getActivity());
+        ivClose = (ImageView) view.findViewById(R.id.ivClose);
 
         // Fetch arguments from bundle and set title
         targetUser = getArguments().getString("Reply");
@@ -68,8 +71,19 @@ public class ComposeFragment extends DialogFragment {
         }
         etCompose.requestFocus();
         btTweet.setOnClickListener(publish);
+        ivClose.setOnClickListener(close);
     }
 
+    private final View.OnClickListener close = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            close();
+        }
+    };
+
+    private void close() {
+        getActivity().onBackPressed();
+    }
     private final View.OnClickListener publish = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -89,7 +103,6 @@ public class ComposeFragment extends DialogFragment {
                     try {
                         Tweet tweet = Tweet.fromJson(json.jsonObject);
                         Log.i(TAG, "Published tweet says: " + tweetContent);
-                        getActivity().onBackPressed();
                     } catch (JSONException e) {
                         Log.e(TAG, "Cannot extract tweet");
                     }
@@ -105,6 +118,7 @@ public class ComposeFragment extends DialogFragment {
             } else {
                 Toast.makeText(getActivity(), "Replied!", Toast.LENGTH_SHORT).show();
             }
+            close();
         }
     };
 }

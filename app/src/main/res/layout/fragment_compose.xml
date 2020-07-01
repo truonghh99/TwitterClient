@@ -12,7 +12,11 @@
         android:id="@+id/textContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_below="@+id/ivClose"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
         app:counterEnabled="true"
         app:counterMaxLength="280">
 
@@ -44,5 +48,18 @@
         android:backgroundTint="@color/twitter_blue_fill_pressed"
         android:text="@string/tweet"
         android:textColor="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:tint="@color/twitter_blue_fill_pressed"
+        app:srcCompat="@drawable/ic_close" />
 
 </RelativeLayout>
