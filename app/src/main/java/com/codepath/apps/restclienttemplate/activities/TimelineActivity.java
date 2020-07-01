@@ -162,6 +162,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.i(TAG, "onLoadMore: " + page);
                 loadMoreData();
+                swipeContainer.setRefreshing(false);
             }
         };
         rvTweets = activityTimelineBinding.rvTweets;

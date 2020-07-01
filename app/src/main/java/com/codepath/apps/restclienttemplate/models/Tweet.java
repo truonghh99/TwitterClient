@@ -51,6 +51,12 @@ public class Tweet {
     @ColumnInfo
     public Long numLike;
 
+    @ColumnInfo
+    public boolean liked;
+
+    @ColumnInfo
+    public boolean retweeded;
+
     // Empty constructor needed for parcel library
     public Tweet() {}
 
@@ -64,6 +70,8 @@ public class Tweet {
         tweet.numLike = jsonObject.getLong("favorite_count");
         tweet.numRetweet = jsonObject.getLong("retweet_count");
         tweet.userId = tweet.user.id;
+        tweet.liked = false;
+        tweet.retweeded = false;
         try {
             JSONArray medias = jsonObject.getJSONObject("entities").getJSONArray("media");
             for (int i = 0; i < medias.length(); ++i) {

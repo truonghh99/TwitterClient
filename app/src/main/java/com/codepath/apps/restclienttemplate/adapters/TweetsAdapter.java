@@ -107,13 +107,25 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivLike = itemTweetBinding.ivLike;
         }
 
-        public void bind(Tweet tweet) {
+        public void bind(final Tweet tweet) {
             tvBody.setText(tweet.body);
             tvName.setText(tweet.user.name);
             tvUsername.setText("@" + tweet.user.userName);
             tvTimeStamp.setText(tweet.createdAt);
             tvRetweetCount.setText(tweet.numRetweet.toString());
             tvLikeCount.setText(tweet.numLike.toString());
+
+            if (tweet.retweeded == true) {
+                ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_retweet), android.graphics.PorterDuff.Mode.MULTIPLY);
+            } else {
+                ivRetweet.setColorFilter(null);
+            }
+
+            if (tweet.liked == true) {
+                ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
+            } else {
+                ivRetweet.setColorFilter(null);
+            }
 
             int radius = 30; // corner radius, higher value = more rounded
             int margin = 0; // crop margin, set to 0 for corners with no crop
@@ -142,10 +154,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (ivRetweet.getColorFilter() == null) {
+                    if (tweet.retweeded == false) {
+                        tweet.retweeded = true;
                         ivRetweet.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_retweet), android.graphics.PorterDuff.Mode.MULTIPLY);
                         increaseNumericTextView(tvRetweetCount);
                     } else {
+                        tweet.retweeded = false;
                         ivRetweet.setColorFilter(null);
                         decreaseNumericTextView(tvRetweetCount);
                     }
@@ -157,10 +171,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (ivLike.getColorFilter() == null) {
+                    if (tweet.liked == false) {
+                        tweet.liked = true;
                         ivLike.setColorFilter(ContextCompat.getColor(context, R.color.inline_action_like), android.graphics.PorterDuff.Mode.MULTIPLY);
                         increaseNumericTextView(tvLikeCount);
                     } else {
+                        tweet.liked = false;
                         ivLike.setColorFilter(null);
                         decreaseNumericTextView(tvLikeCount);
                     }
