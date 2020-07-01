@@ -92,7 +92,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     .load(user.profileImgUrl)
                     .transform(new RoundedCornersTransformation(radius, margin))
                     .into(ivProfileImage);
-            Log.e(TAG, "BINDED");
         }
     }
 }
