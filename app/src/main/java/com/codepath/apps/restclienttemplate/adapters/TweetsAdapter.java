@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.activities.DetailActivity;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
 
@@ -112,7 +115,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvRetweetCount.setText(tweet.numRetweet.toString());
             tvLikeCount.setText(tweet.numLike.toString());
 
-            Glide.with(context).load(tweet.user.profileImgUrl).into(ivProfileImage);
+            int radius = 30; // corner radius, higher value = more rounded
+            int margin = 0; // crop margin, set to 0 for corners with no crop
+
+            Glide.with(context)
+                    .load(tweet.user.profileImgUrl)
+                    .transform(new RoundedCornersTransformation(radius, margin))
+                    .into(ivProfileImage);
+
             if (tweet.imgUrl != null) {
                 Glide.with(context).load(tweet.imgUrl).into(ivMedia);
             } else {

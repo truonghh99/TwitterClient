@@ -23,10 +23,14 @@ import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+
 import org.parceler.Parcels;
 
 import java.sql.Time;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import okhttp3.Headers;
 
 public class DetailActivity extends AppCompatActivity {
@@ -79,7 +83,13 @@ public class DetailActivity extends AppCompatActivity {
         tvRetweetCount.setText(convertNumericValToString(tweet.numRetweet, "RETWEETS"));
         tvLikeCount.setText(convertNumericValToString(tweet.numLike, "FAVORITES"));
 
-        Glide.with(DetailActivity.this).load(tweet.user.profileImgUrl).into(ivProfileImage);
+        int radius = 30; // corner radius, higher value = more rounded
+        int margin = 0; // crop margin, set to 0 for corners with no crop
+
+        Glide.with(DetailActivity.this)
+                .load(tweet.user.profileImgUrl)
+                .transform(new RoundedCornersTransformation(radius, margin))
+                .into(ivProfileImage);
 
         if (tweet.imgUrl != null) {
             Glide.with(DetailActivity.this).load(tweet.imgUrl).into(ivMedia);
