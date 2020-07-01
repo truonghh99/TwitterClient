@@ -37,6 +37,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
-        android:text="@string/tweet" />
+        android:background="@color/twitter_blue_fill_pressed"
+        android:backgroundTint="@color/twitter_blue_fill_pressed"
+        android:text="@string/tweet"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

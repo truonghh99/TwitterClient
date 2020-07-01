@@ -62,6 +62,10 @@ public class ComposeActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Your tweet cannot be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (tweetContent.length() > 280) {
+                Toast.makeText(getApplicationContext(), "Your tweet is too long!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             client.publishTweet(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
