@@ -43,12 +43,13 @@ The following **additional** features are implemented:
 
 * [x] User can view an account detail fragment by clicking at any profile on their timeline
 * [x] Add option to follow users in displayed profile's follower/following list
+* [x] Create a Trending activity to shows trending topics & allow users to access link to those topics on Twitter
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/truonghh99/TwitterClient/blob/master/Demo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
