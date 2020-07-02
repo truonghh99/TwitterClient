@@ -256,6 +256,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem compose = menu.findItem(R.id.miCompose);
+        MenuItem explore = menu.findItem(R.id.miExplore);
         miActionProgressItem = menu.findItem(R.id.miActionProgress);
 
         compose.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -263,6 +264,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public boolean onMenuItemClick(MenuItem menuItem) {
                 showComposeDialog("");
                 return false;
+            }
+        });
+
+        explore.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(TimelineActivity.this, ExploreActivity.class);
+                startActivity(intent);
+                return true;
             }
         });
 

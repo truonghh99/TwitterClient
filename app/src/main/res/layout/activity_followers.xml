@@ -45,19 +45,11 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeContainer"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:layout_marginTop="0dp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvUsers"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:layout_margin="0dp"
-            android:layout_marginTop="0dp" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:layout_margin="0dp"
+        android:layout_marginTop="0dp" />
 </RelativeLayout>

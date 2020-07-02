@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/miExplore"
+        android:icon="@drawable/ic_explore"
+        android:title="explore"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/miCompose"
         android:icon="@drawable/vector_compose_fab"
         android:title="miCompose"
