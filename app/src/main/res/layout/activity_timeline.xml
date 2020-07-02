@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".activities.TimelineActivity">
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <!-- Your scrolling content -->
-
-    </androidx.core.widget.NestedScrollView>
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.codepath.apps.restclienttemplate.activities.TimelineActivity"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
@@ -29,7 +22,7 @@
             android:background="@color/twitter_blue"
             android:maxHeight="?attr/actionBarSize"
             app:titleTextColor="@android:color/white"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways|snap">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -61,23 +54,23 @@
 
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeContainer"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="653dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTweets"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
-            android:layout_marginTop="0dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTweets"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/toolbar"
-                android:layout_margin="0dp"
-                android:layout_marginTop="0dp" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_margin="0dp"
+            android:layout_marginTop="0dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
