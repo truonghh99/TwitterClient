@@ -111,6 +111,12 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
+	public void getTrend(JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("trends/place.json?id=1");
+		RequestParams params = new RequestParams();
+		params.put("id", 1);
+		client.get(apiUrl, params, handler);
+	}
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");
 	 * 2. Define the parameters to pass to the request (query or body)
