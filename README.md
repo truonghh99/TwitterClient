@@ -55,7 +55,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+I got into a lot of trouble working with the local database and async request, but thank to them, I also learned a lot
 
 ## Open-source libraries used
 
