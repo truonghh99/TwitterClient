@@ -89,12 +89,7 @@ public class Tweet {
             JSONArray medias = jsonObject.getJSONObject("entities").getJSONArray("media");
             for (int i = 0; i < medias.length(); ++i) {
                 JSONObject media = medias.getJSONObject(0);
-                if (media.getString("type").equalsIgnoreCase("photo")) {
-                    tweet.imgUrl = media.getString("media_url_https");
-                    break;
-                } else {
-                    tweet.imgUrl = null;
-                }
+                tweet.imgUrl = media.getString("media_url_https");
             }
         } catch (JSONException e) {
             tweet.imgUrl = null;
