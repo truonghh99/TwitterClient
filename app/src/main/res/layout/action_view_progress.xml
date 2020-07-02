@@ -4,4 +4,7 @@
     style="?android:attr/progressBarStyleLarge"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:progressTint="#0071FB" />
+    android:backgroundTint="#FFFFFF"
+    android:foregroundTint="@color/medium_gray"
+    android:indeterminateTint="#4DFFFFFF"
+    android:progressTint="@color/inline_action_disabled" />
