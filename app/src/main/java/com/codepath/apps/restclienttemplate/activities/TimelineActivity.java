@@ -141,9 +141,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         rvTweets.setAdapter(adapter);
 
         setUpSwipeContainer(activityTimelineBinding);
-
-        showInformationFromDataBase();
-        populateHomeTimeline();
     }
 
     private void showComposeDialog(String targetUser) {
@@ -213,6 +210,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 offlineMode = true;
                 Log.i(TAG, "onFailure! " + response, throwable);
+                hideProgressBar();
 
             }
         }, tweets.get(tweets.size() - 1).id);
@@ -223,7 +221,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                showProgressBar();
                 Log.i(TAG, "onSuccess when populate HomeTimeline! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
@@ -243,6 +240,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 offlineMode = true;
                 Log.i(TAG, "onFailure! " + response, throwable);
+                hideProgressBar();
             }
         });
         if (offlineMode) announceOfflineMode();
@@ -267,6 +265,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem compose = menu.findItem(R.id.miCompose);
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
 
         compose.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -276,12 +275,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             }
         });
 
+        showProgressBar();
+        showInformationFromDataBase();
+        populateHomeTimeline();
         return true;
-    }
-
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        miActionProgressItem = menu.findItem(R.id.miActionProgress);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     public void showProgressBar() {

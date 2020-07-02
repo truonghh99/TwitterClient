@@ -41,10 +41,13 @@ public class FollowersActivity extends AppCompatActivity {
     private TwitterClient client;
     private RecyclerView.LayoutManager layoutManager;
     private Long userId;
+    private MenuItem miActionProgressItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ActivityFollowersBinding activityFollowersBinding = ActivityFollowersBinding.inflate(getLayoutInflater());
         setContentView(activityFollowersBinding.getRoot());
 
@@ -60,8 +63,6 @@ public class FollowersActivity extends AppCompatActivity {
         rvUsers = activityFollowersBinding.rvUsers;
         rvUsers.setLayoutManager(layoutManager);
         rvUsers.setAdapter(usersAdapter);
-
-        populateFolowersList();
     }
 
     private void populateFolowersList() {
@@ -83,6 +84,7 @@ public class FollowersActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
+                hideProgressBar();
             }
 
             @Override
@@ -92,8 +94,12 @@ public class FollowersActivity extends AppCompatActivity {
         }, userId);
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        showProgressBar();
+        Log.e(TAG, miActionProgressItem.toString());
         MenuItem miHome = menu.findItem(R.id.miHome);
         Drawable newIcon = (Drawable) miHome.getIcon();
         newIcon.mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
@@ -108,6 +114,7 @@ public class FollowersActivity extends AppCompatActivity {
             }
         });
 
+        populateFolowersList();
         return true;
     }
 
@@ -116,5 +123,13 @@ public class FollowersActivity extends AppCompatActivity {
         Toolbar toolbar = activityFollowersBinding.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    public void showProgressBar() {
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        miActionProgressItem.setVisible(false);
     }
 }

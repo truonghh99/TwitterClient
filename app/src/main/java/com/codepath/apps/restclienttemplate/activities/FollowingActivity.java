@@ -35,7 +35,7 @@ import okhttp3.Headers;
 
 public class FollowingActivity extends AppCompatActivity {
 
-    private static final String TAG = "FollowersActivity";
+    private static final String TAG = "FollowingActivity";
     private RecyclerView rvUsers;
     private List<User> users;
     private UsersAdapter usersAdapter;
@@ -43,6 +43,8 @@ public class FollowingActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private Long userId;
     private Long cursor;
+    private MenuItem miActionProgressItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class FollowingActivity extends AppCompatActivity {
     }
 
     private void populateFollowingList() {
+        showProgressBar();
         client.getFollowing(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -85,6 +88,7 @@ public class FollowingActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
+                hideProgressBar();
             }
 
             @Override
@@ -94,8 +98,12 @@ public class FollowingActivity extends AppCompatActivity {
         }, userId);
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        showProgressBar();
+        Log.e(TAG, miActionProgressItem.toString());
         MenuItem miHome = menu.findItem(R.id.miHome);
         Drawable newIcon = (Drawable) miHome.getIcon();
         newIcon.mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
@@ -110,13 +118,21 @@ public class FollowingActivity extends AppCompatActivity {
             }
         });
 
+        populateFollowingList();
         return true;
     }
-
 
     private void setUpToolbar(com.codepath.apps.restclienttemplate.databinding.ActivityFollowingBinding activityFollowingBinding) {
         Toolbar toolbar = activityFollowingBinding.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    public void showProgressBar() {
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        miActionProgressItem.setVisible(false);
     }
 }
