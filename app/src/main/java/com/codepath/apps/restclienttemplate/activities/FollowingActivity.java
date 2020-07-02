@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.adapters.UsersAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityFollowersBinding;
 import com.codepath.apps.restclienttemplate.databinding.ActivityFollowingBinding;
@@ -30,6 +31,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
 
@@ -54,9 +56,18 @@ public class FollowingActivity extends AppCompatActivity {
 
         setUpToolbar(activityFollowingBinding);
 
+        UsersAdapter.OnClickListener onClickListener= new UsersAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                final User user = users.get(position);
+                user.attemptToFollow(client, FollowingActivity.this);
+                usersAdapter.notifyItemChanged(position);
+            }
+        };
+
         client = TwitterApp.getRestClient(this);
         users = new ArrayList<>();
-        usersAdapter = new UsersAdapter(FollowingActivity.this, users);
+        usersAdapter = new UsersAdapter(FollowingActivity.this, users, onClickListener);
         layoutManager = new LinearLayoutManager(this);
 
         userId = getIntent().getLongExtra(TimelineActivity.KEY_USER_ID, 0);
@@ -65,7 +76,6 @@ public class FollowingActivity extends AppCompatActivity {
         rvUsers.setLayoutManager(layoutManager);
         rvUsers.setAdapter(usersAdapter);
 
-        populateFollowingList();
     }
 
     private void populateFollowingList() {

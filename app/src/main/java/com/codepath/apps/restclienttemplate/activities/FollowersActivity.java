@@ -29,6 +29,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
 
@@ -53,9 +54,18 @@ public class FollowersActivity extends AppCompatActivity {
 
         setUpToolbar(activityFollowersBinding);
 
+        UsersAdapter.OnClickListener onClickListener= new UsersAdapter.OnClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                final User user = users.get(position);
+                user.attemptToFollow(client, FollowersActivity.this);
+                usersAdapter.notifyItemChanged(position);
+            }
+        };
+
         client = TwitterApp.getRestClient(this);
         users = new ArrayList<>();
-        usersAdapter = new UsersAdapter(FollowersActivity.this, users);
+        usersAdapter = new UsersAdapter(FollowersActivity.this, users, onClickListener);
         layoutManager = new LinearLayoutManager(this);
 
         userId = getIntent().getLongExtra(TimelineActivity.KEY_USER_ID, 0);

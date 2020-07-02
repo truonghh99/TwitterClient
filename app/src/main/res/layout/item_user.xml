@@ -31,11 +31,24 @@
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_below="@+id/tvName"
         android:textSize="15sp"
         tools:text="@hatruong99" />
+
+    <Button
+        android:id="@+id/btnFollow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:background="#FFFFFF"
+        android:text="Follow"
+        android:textColor="@color/twitter_blue_fill_pressed"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
