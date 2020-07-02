@@ -112,7 +112,7 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	public void getTrend(JsonHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("trends/place.json?id=1");
+		String apiUrl = getApiUrl("trends/place.json");
 		RequestParams params = new RequestParams();
 		params.put("id", 1);
 		client.get(apiUrl, params, handler);

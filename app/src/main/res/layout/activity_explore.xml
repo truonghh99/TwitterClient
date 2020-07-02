@@ -37,7 +37,7 @@
                 android:layout_marginLeft="48dp"
                 android:layout_marginTop="6dp"
                 android:scaleType="centerInside"
-                android:text="Trending Near You"
+                android:text="Trending Worldwide"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />

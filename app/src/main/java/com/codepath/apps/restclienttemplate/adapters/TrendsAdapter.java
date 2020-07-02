@@ -101,6 +101,8 @@ public class TrendsAdapter extends RecyclerView.Adapter<TrendsAdapter.ViewHolder
                     onClickListener.onClickListener(getAdapterPosition());
                 }
             });
+
+            Log.e(TAG, "binded!");
         }
     }
 }

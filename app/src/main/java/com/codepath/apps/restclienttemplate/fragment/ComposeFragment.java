@@ -134,11 +134,6 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
                     } catch (JSONException e) {
                         Log.e(TAG, "Cannot extract tweet");
                     }
-                    if (targetUser.isEmpty()) {
-                        Toast.makeText(getActivity(), "Tweeted!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Replied!", Toast.LENGTH_SHORT).show();
-                    }
                     close();
                 }
 
@@ -147,6 +142,11 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
                     Log.e(TAG, "onFailure to publish tweet", throwable);
                 }
             }, tweetContent);
+            if (targetUser.isEmpty()) {
+                Toast.makeText(getActivity(), "Tweeted!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Replied!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }

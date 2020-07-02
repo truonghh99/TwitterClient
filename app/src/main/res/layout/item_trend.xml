@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvIndex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
         tools:text="1. Trending" />
 
     <TextView
         android:id="@+id/tvTrendName"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIndex"
+        android:layout_marginLeft="10dp"
         android:text="TextView"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        tools:text="#ChainedToTheRhythm"
-        android:layout_below="@+id/tvIndex" />
+        tools:text="#ChainedToTheRhythm" />
 
     <Button
         android:id="@+id/btExplore"

@@ -28,6 +28,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,10 +86,20 @@ public class ExploreActivity extends AppCompatActivity {
                 Log.i(TAG, "onSuccess when populate Trends! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
+                    jsonArray = (JSONArray) jsonArray.getJSONObject(0).get("trends");
+                    Log.i(TAG, "Object! " + jsonArray.toString());
+                    Log.i(TAG, "Again! " + jsonArray.get(0).toString());
+                } catch (JSONException e) {
+                    Log.i(TAG, "Cannot extract trend");
+                    e.printStackTrace();
+                }
+                try {
                     trends = Trend.fromJsonArray(jsonArray);
+                    Log.i(TAG, trends.toString());
                     adapter.clear();
                     adapter.addAll(trends);
                     adapter.notifyDataSetChanged();
+                    Log.e(TAG, "Notified!");
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
