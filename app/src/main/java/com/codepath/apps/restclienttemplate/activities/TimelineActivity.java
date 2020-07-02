@@ -62,7 +62,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private TweetDao tweetDao;
     private List<Tweet> tweetsFromNetwork;
     private int currentPosition;
-    private boolean offlineMode = false;
 
     private MenuItem miActionProgressItem;
     @Override
@@ -181,7 +180,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "Showing information from DB");
+                Log.i(TAG, "Showing information from DB. Num saved: " + tweetDao.recentItems().size());
                 List<TweetWithUser> tweetWithUsers = tweetDao.recentItems();
                 List<Tweet> tweetsFromDB = TweetWithUser.getTweetlist(tweetWithUsers);
                 adapter.clear();
@@ -194,13 +193,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         client.getNextPageOfTweets(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                offlineMode = false;
                 showProgressBar();
                 Log.i(TAG, "Load more data onSuccess! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
-                    adapter.addAll(Tweet.fromJsonArray(jsonArray));
+                    tweetsFromNetwork = Tweet.fromJsonArray(jsonArray);
+                    adapter.addAll(tweetsFromNetwork);
                     adapter.notifyDataSetChanged();
+                    insertTweetsToDatabase();
+                    swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
@@ -209,20 +210,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                offlineMode = true;
                 Log.i(TAG, "onFailure! " + response, throwable);
-                hideProgressBar();
-
             }
         }, tweets.get(tweets.size() - 1).id);
-        if (offlineMode) announceOfflineMode();
     }
 
     private void populateHomeTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                offlineMode = false;
                 Log.i(TAG, "onSuccess when populate HomeTimeline! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
@@ -230,8 +226,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                     adapter.clear();
                     adapter.addAll(tweetsFromNetwork);
                     adapter.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
                     insertTweetsToDatabase();
+                    swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     Log.e(TAG, "Json exception", e);
                 }
@@ -240,23 +236,16 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                offlineMode = true;
                 Log.i(TAG, "onFailure! " + response, throwable);
-                hideProgressBar();
             }
         });
-        if (offlineMode) announceOfflineMode();
-    }
-
-    public void announceOfflineMode() {
-        Toast.makeText(getApplicationContext(),"Offline mode - cannot load data right now", Toast.LENGTH_SHORT).show();
     }
 
     private void insertTweetsToDatabase() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "Saving information into DB");
+                Log.i(TAG, "Saving information into DB. Num saved: " + String.valueOf(tweetDao.recentItems().size()));
                 List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
                 tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
                 tweetDao.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
