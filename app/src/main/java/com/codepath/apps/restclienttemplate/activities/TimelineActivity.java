@@ -185,6 +185,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 List<Tweet> tweetsFromDB = TweetWithUser.getTweetlist(tweetWithUsers);
                 adapter.clear();
                 adapter.addAll(tweetsFromDB);
+                adapter.notifyDataSetChanged();
             }
         });
     }
