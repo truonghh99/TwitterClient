@@ -33,6 +33,8 @@ import okhttp3.Headers;
 public class ComposeFragment extends DialogFragment implements TextView.OnEditorActionListener {
 
     private static final String TAG = "ComposeFragment";
+    private static final String TARGET_USER_KEY = "TargetUser";
+    private static int MAX_TWEET_LENGTH = 280;
     private EditText etCompose;
     private Button btTweet;
     private String tweetContent;
@@ -60,10 +62,11 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
         void onFinishComposeTweet(Tweet returnTweet);
     }
 
+    // Replace normal constructor
     public static ComposeFragment newInstance(String targetUser) {
         ComposeFragment frag = new ComposeFragment();
         Bundle args = new Bundle();
-        args.putString("Reply", targetUser);
+        args.putString(TARGET_USER_KEY, targetUser);
         frag.setArguments(args);
         return frag;
     }
@@ -84,11 +87,12 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
         ivClose = (ImageView) view.findViewById(R.id.ivClose);
 
         // Fetch arguments from bundle and set title
-        targetUser = getArguments().getString("Reply");
+        targetUser = getArguments().getString(TARGET_USER_KEY);
         if (targetUser != "") {
             etCompose.setText("@" + targetUser + " ");
             btTweet.setText("Reply");
         }
+
         etCompose.requestFocus();
         btTweet.setOnClickListener(publish);
         ivClose.setOnClickListener(close);
@@ -105,6 +109,7 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
     private void close() {
         getActivity().onBackPressed();
     }
+
     private final View.OnClickListener publish = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -113,7 +118,7 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
                 Toast.makeText(getActivity(), "Your tweet is empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (tweetContent.length() > 280) {
+            if (tweetContent.length() > MAX_TWEET_LENGTH) {
                 Toast.makeText(getActivity(), "Your tweet is too long!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -129,6 +134,12 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
                     } catch (JSONException e) {
                         Log.e(TAG, "Cannot extract tweet");
                     }
+                    if (targetUser.isEmpty()) {
+                        Toast.makeText(getActivity(), "Tweeted!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Replied!", Toast.LENGTH_SHORT).show();
+                    }
+                    close();
                 }
 
                 @Override
@@ -136,12 +147,6 @@ public class ComposeFragment extends DialogFragment implements TextView.OnEditor
                     Log.e(TAG, "onFailure to publish tweet", throwable);
                 }
             }, tweetContent);
-            if (targetUser.isEmpty()) {
-                Toast.makeText(getActivity(), "Tweeted!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), "Replied!", Toast.LENGTH_SHORT).show();
-            }
-            close();
         }
     };
 }

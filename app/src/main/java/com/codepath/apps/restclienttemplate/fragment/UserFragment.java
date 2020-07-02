@@ -76,14 +76,15 @@ public class UserFragment extends DialogFragment {
         tvFollowingCount.setText(user.followingCount);
         tvFollowerCount.setText(user.followersCount);
 
+        // Load profile image
         int radius = 30; // corner radius, higher value = more rounded
         int margin = 0; // crop margin, set to 0 for corners with no crop
-
         Glide.with(getActivity())
                 .load(user.profileImgUrl)
                 .transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivProfileImage);
 
+        // Follower clickable text opens follower view
         final View.OnClickListener followerOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +94,7 @@ public class UserFragment extends DialogFragment {
             }
         };
 
+        // Follower clickable text opens following view
         View.OnClickListener followingOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -77,6 +77,7 @@ public class DetailActivity extends AppCompatActivity {
         ivLike = activityDetailBinding.ivLike;
         client = TwitterApp.getRestClient(this);
 
+        // Get tweet information from TimelineActivity
         tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(TimelineActivity.KEY_TWEET));
         Log.e(TAG, tweet.toString());
 
@@ -84,17 +85,19 @@ public class DetailActivity extends AppCompatActivity {
         tvName.setText(tweet.user.name);
         tvUsername.setText("@" + tweet.user.userName);
         tvTimeStamp.setText(tweet.createdAt);
+        // Modify retweet/like text and button based on current tweet's information
         updateRetweetStatus();
         updateLikeStatus();
 
+        // Load profile image
         int radius = 30; // corner radius, higher value = more rounded
         int margin = 0; // crop margin, set to 0 for corners with no crop
-
         Glide.with(DetailActivity.this)
                 .load(tweet.user.profileImgUrl)
                 .transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivProfileImage);
 
+        // Load media image (if any)
         if (tweet.imgUrl != null) {
             Glide.with(DetailActivity.this).load(tweet.imgUrl).into(ivMedia);
         } else {
@@ -102,6 +105,7 @@ public class DetailActivity extends AppCompatActivity {
             ivMedia.setImageResource(0);
         }
 
+        // Reply button opens reply view (fragment)
         ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +113,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        // Retweet button updates retweet status
         ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +122,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        // Like button updates like status
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,6 +157,7 @@ public class DetailActivity extends AppCompatActivity {
         newIcon.mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
         miHome.setIcon(newIcon);
 
+        // Go back to TimelineActivity when home button is clicked
         miHome.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

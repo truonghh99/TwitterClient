@@ -194,6 +194,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         client.getNextPageOfTweets(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                offlineMode = false;
                 showProgressBar();
                 Log.i(TAG, "Load more data onSuccess! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
@@ -221,6 +222,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                offlineMode = false;
                 Log.i(TAG, "onSuccess when populate HomeTimeline! " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {

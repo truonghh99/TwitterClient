@@ -54,6 +54,7 @@ public class FollowersActivity extends AppCompatActivity {
 
         setUpToolbar(activityFollowersBinding);
 
+        // Allow users to follow other account using the "Follow" button
         UsersAdapter.OnClickListener onClickListener= new UsersAdapter.OnClickListener() {
             @Override
             public void onClickListener(int position) {
@@ -75,7 +76,8 @@ public class FollowersActivity extends AppCompatActivity {
         rvUsers.setAdapter(usersAdapter);
     }
 
-    private void populateFolowersList() {
+    // Load followersList
+    private void populateFollowersList() {
         client.getFollowers(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -124,7 +126,8 @@ public class FollowersActivity extends AppCompatActivity {
             }
         });
 
-        populateFolowersList();
+        // Populate followers list after option menu is created to avoid null exception caused by undefined progress action bar
+        populateFollowersList();
         return true;
     }
 

@@ -79,6 +79,7 @@ public class User {
         return users;
     }
 
+    // Convert list of tweets to list of users
     public static List<User> fromJsonTweetArray(List<Tweet> tweetsFromNetwork) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < tweetsFromNetwork.size(); ++i) {
@@ -100,7 +101,7 @@ public class User {
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                     Toast.makeText(context, "Unsuccess to follow!", Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, "unSuccess to follow");
+                    Log.i(TAG, "onFailure to follow" + response);
                 }
             }, id);
         } else {
@@ -113,7 +114,7 @@ public class User {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Log.i(TAG, "onFailure to unfollow");
+                    Log.i(TAG, "onFailure to unfollow" + response);
                 }
             }, id);
         }

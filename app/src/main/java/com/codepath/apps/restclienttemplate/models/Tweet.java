@@ -83,6 +83,8 @@ public class Tweet {
         tweet.userId = tweet.user.id;
         tweet.liked = false;
         tweet.retweeded = false;
+
+        // Retrieve the first media image included (if any)
         try {
             JSONArray medias = jsonObject.getJSONObject("entities").getJSONArray("media");
             for (int i = 0; i < medias.length(); ++i) {
@@ -98,6 +100,7 @@ public class Tweet {
             tweet.imgUrl = null;
             Log.d(TAG, "Doesn't have image");
         }
+
         return tweet;
     }
 
@@ -110,6 +113,7 @@ public class Tweet {
         return tweets;
     }
 
+    // Convert composed time to relative time
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -131,65 +135,66 @@ public class Tweet {
         if (retweeded == false) {
             retweeded = true;
             ++numRetweet;
+            client.retweetTweet(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Toast.makeText(context, "Retweed!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "onSuccess to retweet");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.e(TAG, "onFailure to retweet");
+                }
+            }, id);
         } else {
             retweeded = false;
             --numRetweet;
+            client.unRetweetTweet(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Toast.makeText(context, "Unretweed!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "onSuccess to unretweet");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.e(TAG, "onFailure to unretweet: " + response);
+                }
+            }, id);
         }
-        client.retweetTweet(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Toast.makeText(context, "Retweed!", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "onSuccess to retweet");
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                client.unRetweetTweet(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(context, "Unretweed!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "onSuccess to unretweet");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Log.i(TAG, "onFailure to unretweet: " + response);
-                    }
-                }, id);
-            }
-        }, id);
     }
 
     public void attemptToLike(final TwitterClient client, final Context context) {
         if (liked == false) {
             liked = true;
             ++numLike;
+            client.likeTweet(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Toast.makeText(context, "Liked!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "onSuccess to like");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                }
+            }, id);
         } else {
             liked = false;
             --numLike;
+            client.unlikeTweet(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Toast.makeText(context, "Unliked!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "onSuccess to unliked");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.i(TAG, "onFailure to unliked");
+                }
+            }, id);
         }
-        client.likeTweet(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Toast.makeText(context, "Liked!", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "onSuccess to like");
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                client.unlikeTweet(new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(context, "Unliked!", Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "onSuccess to unliked");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Log.i(TAG, "onFailure to unliked");
-                    }
-                }, id);
-            }
-        }, id);
     }
 }

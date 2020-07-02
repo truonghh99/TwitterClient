@@ -133,7 +133,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
             int radius = 30; // corner radius, higher value = more rounded
             int margin = 0; // crop margin, set to 0 for corners with no crop
-
             Glide.with(context)
                     .load(tweet.user.profileImgUrl)
                     .transform(new RoundedCornersTransformation(radius, margin))

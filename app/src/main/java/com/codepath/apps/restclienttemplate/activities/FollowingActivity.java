@@ -56,6 +56,7 @@ public class FollowingActivity extends AppCompatActivity {
 
         setUpToolbar(activityFollowingBinding);
 
+        // Allow users to follow other profiles
         UsersAdapter.OnClickListener onClickListener= new UsersAdapter.OnClickListener() {
             @Override
             public void onClickListener(int position) {
@@ -78,6 +79,7 @@ public class FollowingActivity extends AppCompatActivity {
 
     }
 
+    // Load followingList
     private void populateFollowingList() {
         showProgressBar();
         client.getFollowing(new JsonHttpResponseHandler() {
@@ -128,6 +130,7 @@ public class FollowingActivity extends AppCompatActivity {
             }
         });
 
+        // Populate followers list after option menu is created to avoid null exception caused by undefined progress action bar
         populateFollowingList();
         return true;
     }
